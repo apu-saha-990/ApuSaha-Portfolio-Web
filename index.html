@@ -1077,18 +1077,18 @@
   .lightbox-close:hover { color: var(--accent); }
 
   .lightbox-body {
-    overflow: auto;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 24px;
+    overflow-y: auto;
+    padding: 32px 40px;
     min-height: 200px;
+    max-height: calc(90vh - 48px);
+    width: 100%;
   }
 
   .lightbox-body img {
     max-width: 100%;
     max-height: 80vh;
     display: block;
+    margin: 0 auto;
   }
 
   .lightbox-body pre {
@@ -1101,6 +1101,27 @@
     max-width: 800px;
     width: 100%;
   }
+
+  /* Markdown rendered styles */
+  .md-body { max-width: 800px; width: 100%; }
+  .md-body h1 { font-family: var(--display); font-size: 28px; font-weight: 800; color: var(--text); margin: 0 0 24px; letter-spacing: -0.02em; }
+  .md-body h2 { font-family: var(--display); font-size: 20px; font-weight: 700; color: var(--accent); margin: 32px 0 12px; padding-bottom: 8px; border-bottom: 1px solid var(--border); }
+  .md-body h3 { font-family: var(--mono); font-size: 13px; color: var(--accent3); letter-spacing: 0.1em; text-transform: uppercase; margin: 24px 0 10px; }
+  .md-body p { font-size: 14px; color: var(--text2); line-height: 1.8; margin: 0 0 14px; font-weight: 300; }
+  .md-body ul, .md-body ol { padding-left: 20px; margin: 0 0 14px; }
+  .md-body li { font-size: 14px; color: var(--text2); line-height: 1.8; margin-bottom: 4px; }
+  .md-body code { font-family: var(--mono); font-size: 11px; background: var(--bg3); color: var(--accent); padding: 2px 6px; border: 1px solid var(--border); }
+  .md-body pre { background: var(--bg3); border: 1px solid var(--border); padding: 16px; overflow-x: auto; margin: 0 0 16px; }
+  .md-body pre code { background: none; border: none; padding: 0; color: var(--text2); }
+  .md-body strong { color: var(--text); font-weight: 600; }
+  .md-body em { color: var(--text2); font-style: italic; }
+  .md-body hr { border: none; border-top: 1px solid var(--border); margin: 24px 0; }
+  .md-body table { width: 100%; border-collapse: collapse; margin: 0 0 16px; font-size: 13px; }
+  .md-body th { font-family: var(--mono); font-size: 10px; color: var(--text3); letter-spacing: 0.1em; text-transform: uppercase; padding: 8px 12px; border: 1px solid var(--border); background: var(--surface); text-align: left; }
+  .md-body td { padding: 8px 12px; border: 1px solid var(--border); color: var(--text2); font-size: 13px; vertical-align: top; }
+  .md-body a { color: var(--accent); text-decoration: none; }
+  .md-body blockquote { border-left: 3px solid var(--accent); padding: 8px 16px; margin: 0 0 16px; background: rgba(0,212,255,0.04); }
+  .md-body blockquote p { margin: 0; }
 
   .lightbox-loading {
     font-family: var(--mono);
@@ -1638,61 +1659,83 @@
     </div>
 
     <!-- PROJECT 5 -->
-    <div class="project-card" style="--card-accent:#b080ff; border-color: var(--border); opacity:0.7;">
+    <div class="project-card" style="--card-accent:#b080ff;">
       <div class="project-index" style="color:rgba(176,128,255,0.15)">05</div>
       <div class="project-left">
-        <div class="project-tag" style="color:#b080ff">— coming soon</div>
-        <h3 class="project-title" style="color:var(--text2)">Project TREE</h3>
-        <p class="project-desc" style="color:var(--text3)">
-          Details to be disclosed. Architecture, stack, and documentation will be added once the project is ready for public reveal.
+        <div class="project-tag" style="color:#b080ff">BASH · LINUX · DOCKER</div>
+        <h3 class="project-title">Pre-Forge Operator Toolkit</h3>
+        <p class="project-desc">
+          A collection of 23 bash tools built while running real BlockDAG node infrastructure for a community of operators. 
+          No formal architecture. No structured design process. Just real problems showing up — broken nodes, corrupted databases, 
+          failed syncs, permission errors — and scripts written to fix them.
+          <br><br>
+          Every tool here was deployed back to real community members. Some were rewritten multiple times when they failed in the field. 
+          Some were deleted entirely when they weren't good enough. What remains is what actually worked.
+          <br><br>
+          All of this was built before we found out the project was a scam. The community was real. The problems were real. The work was real.
         </p>
         <ul class="project-features">
-          <li style="color:var(--text3)">In development</li>
-          <li style="color:var(--text3)">Details pending</li>
-          <li style="color:var(--text3)">Documentation coming</li>
+          <li>6 node installers — from single-file scripts to a self-healing installer that rewrites its own source code when the download link breaks</li>
+          <li>Linux performance optimizer with full reversal capability — every change is backed up before it's made</li>
+          <li>Sync ETA calculator, peer latency analyser, and port diagnostics for live nodes</li>
+          <li>RocksDB corruption scanner — isolates faulty .sst files away from the node root</li>
+          <li>Backup, restore, and a shared-drive sync tool so falling-behind operators could jumpstart to today's state</li>
+          <li>Browser-based presale transaction tracker across 15 chains — became the seed for WalletDNA</li>
         </ul>
         <div class="project-links">
-          <button class="link-chip" style="cursor:default;opacity:0.4" disabled>
+          <a href="https://github.com/apu-saha-990/Project05-operator-toolkit" target="_blank" class="link-chip">
             <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2A10 10 0 0 0 2 12c0 4.42 2.87 8.17 6.84 9.5.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34-.46-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.87 1.52 2.34 1.07 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.92 0-1.11.38-2 1.03-2.71-.1-.25-.45-1.29.1-2.64 0 0 .84-.27 2.75 1.02.79-.22 1.65-.33 2.5-.33.85 0 1.71.11 2.5.33 1.91-1.29 2.75-1.02 2.75-1.02.55 1.35.2 2.39.1 2.64.65.71 1.03 1.6 1.03 2.71 0 3.82-2.34 4.66-4.57 4.91.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0 0 12 2z"/></svg>
             GitHub
-          </button>
-          <button class="link-chip" style="cursor:default;opacity:0.4" disabled>
+          </a>
+          <button class="link-chip" onclick="openLightbox('arch','assets/arch/p5-arch.png','P05 — Architecture')">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
             Architecture
           </button>
-          <button class="link-chip" style="cursor:default;opacity:0.4" disabled>
+          <button class="link-chip" onclick="openLightbox('arch','assets/readme/p5-tree.png','P05 — Folder Tree')">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 4h4v4H3zM3 10h4v4H3zM3 16h4v4H3M7 6h3M7 12h7M7 18h5M10 6v6M14 12v6"/></svg>
             FolderTree
           </button>
-          <button class="link-chip" style="cursor:default;opacity:0.4" disabled>
+          <button class="link-chip" onclick="openLightbox('readme','assets/readme/p5-readme.md','P05 — README')">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
             Readme
           </button>
         </div>
       </div>
       <div class="project-right">
-        <div class="stack-label">// Tech Stack</div>
+        <div class="stack-label">// Tools Used</div>
         <div class="stack-grid">
-          <div class="stack-item" style="opacity:0.4">
-            <div class="stack-item-cat">Stack</div>
-            <div class="stack-item-val">TBA</div>
+          <div class="stack-item">
+            <div class="stack-item-cat">Scripting</div>
+            <div class="stack-item-val">Bash</div>
           </div>
-          <div class="stack-item" style="opacity:0.4">
-            <div class="stack-item-cat">Chain</div>
-            <div class="stack-item-val">TBA</div>
+          <div class="stack-item">
+            <div class="stack-item-cat">Environment</div>
+            <div class="stack-item-val">Ubuntu Linux</div>
           </div>
-          <div class="stack-item" style="opacity:0.4">
-            <div class="stack-item-cat">Tooling</div>
-            <div class="stack-item-val">TBA</div>
+          <div class="stack-item">
+            <div class="stack-item-cat">Containers</div>
+            <div class="stack-item-val">Docker + Compose</div>
           </div>
-          <div class="stack-item" style="opacity:0.4">
-            <div class="stack-item-cat">Status</div>
-            <div class="stack-item-val">In Dev</div>
+          <div class="stack-item">
+            <div class="stack-item-cat">Database</div>
+            <div class="stack-item-val">RocksDB</div>
+          </div>
+          <div class="stack-item">
+            <div class="stack-item-cat">Node Comms</div>
+            <div class="stack-item-val">JSON-RPC</div>
+          </div>
+          <div class="stack-item">
+            <div class="stack-item-cat">Alerts</div>
+            <div class="stack-item-val">Discord Webhooks</div>
+          </div>
+          <div class="stack-item">
+            <div class="stack-item-cat">Web</div>
+            <div class="stack-item-val">HTML · JavaScript · SheetJS</div>
           </div>
         </div>
-        <div class="proof-banner" style="--card-accent:#b080ff; opacity:0.5;">
-          <div class="proof-label">// Status</div>
-          <div class="proof-text">Project details will be published when development reaches the documentation stage.</div>
+        <div class="proof-banner" style="--card-accent:#b080ff">
+          <div class="proof-label">// What This Proves</div>
+          <div class="proof-text">No formal education. No university. No bootcamp. Learning by building — with AI as the only teacher and real broken infrastructure as the classroom. Direct feedback loop — broken node reported, script written, redeployed to community. This is the foundation everything else was built on.</div>
         </div>
       </div>
     </div>
@@ -1857,6 +1900,88 @@
 </div>
 
 <script>
+  function parseMarkdown(md) {
+    const lines = md.split('\n');
+    let html = '';
+    let inTable = false;
+    let inCode = false;
+    let codeBuffer = '';
+    let inList = false;
+
+    for (let i = 0; i < lines.length; i++) {
+      let line = lines[i];
+
+      // Code block
+      if (line.trim().startsWith('```')) {
+        if (!inCode) {
+          if (inList) { html += '</ul>'; inList = false; }
+          inCode = true; codeBuffer = '';
+        } else {
+          inCode = false;
+          html += `<pre><code>${escHtml(codeBuffer)}</code></pre>`;
+        }
+        continue;
+      }
+      if (inCode) { codeBuffer += line + '\n'; continue; }
+
+      // Table
+      if (line.includes('|') && line.trim().startsWith('|')) {
+        if (line.replace(/[\|\s\-]/g, '').length === 0) continue; // separator row
+        if (inList) { html += '</ul>'; inList = false; }
+        const cells = line.split('|').filter((c,i,a) => i > 0 && i < a.length-1).map(c => c.trim());
+        if (!inTable) { html += '<table>'; inTable = true; html += '<tr>' + cells.map(c => `<th>${inline(c)}</th>`).join('') + '</tr>'; }
+        else { html += '<tr>' + cells.map(c => `<td>${inline(c)}</td>`).join('') + '</tr>'; }
+        continue;
+      } else if (inTable) { html += '</table>'; inTable = false; }
+
+      // HR
+      if (/^[-*_]{3,}$/.test(line.trim())) {
+        if (inList) { html += '</ul>'; inList = false; }
+        html += '<hr>'; continue;
+      }
+
+      // Headings
+      const h3 = line.match(/^###\s+(.*)/);
+      const h2 = line.match(/^##\s+(.*)/);
+      const h1 = line.match(/^#\s+(.*)/);
+      if (h1) { if (inList) { html += '</ul>'; inList = false; } html += `<h1>${inline(h1[1])}</h1>`; continue; }
+      if (h2) { if (inList) { html += '</ul>'; inList = false; } html += `<h2>${inline(h2[1])}</h2>`; continue; }
+      if (h3) { if (inList) { html += '</ul>'; inList = false; } html += `<h3>${inline(h3[1])}</h3>`; continue; }
+
+      // Blockquote
+      const bq = line.match(/^>\s*(.*)/);
+      if (bq) { if (inList) { html += '</ul>'; inList = false; } html += `<blockquote><p>${inline(bq[1])}</p></blockquote>`; continue; }
+
+      // List
+      const li = line.match(/^[-*]\s+(.*)/);
+      if (li) { if (!inList) { html += '<ul>'; inList = true; } html += `<li>${inline(li[1])}</li>`; continue; }
+      else if (inList) { html += '</ul>'; inList = false; }
+
+      // Empty line
+      if (line.trim() === '') { continue; }
+
+      // Paragraph
+      html += `<p>${inline(line)}</p>`;
+    }
+
+    if (inList) html += '</ul>';
+    if (inTable) html += '</table>';
+    return html;
+  }
+
+  function inline(text) {
+    return text
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+      .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+      .replace(/\*(.+?)\*/g, '<em>$1</em>')
+      .replace(/`(.+?)`/g, '<code>$1</code>')
+      .replace(/\[(.+?)\]\((.+?)\)/g, '<a href="$2" target="_blank">$1</a>');
+  }
+
+  function escHtml(t) {
+    return t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  }
+
   function openLightbox(type, path, title) {
     const overlay = document.getElementById('lightbox');
     const body = document.getElementById('lightbox-body');
@@ -1869,22 +1994,21 @@
     if (type === 'arch') {
       const img = new Image();
       img.onload = () => { body.innerHTML = ''; body.appendChild(img); };
-      img.onerror = () => { body.innerHTML = '<span class="lightbox-loading" style="color:var(--warn)">// image not found — place file at: ' + path + '</span>'; };
+      img.onerror = () => { body.innerHTML = `<span class="lightbox-loading" style="color:var(--warn)">// image not found — place file at: ${path}</span>`; };
       img.src = path;
     } else {
       fetch(path)
-        .then(r => {
-          if (!r.ok) throw new Error('not found');
-          return r.text();
-        })
+        .then(r => { if (!r.ok) throw new Error('not found'); return r.text(); })
         .then(text => {
-          const pre = document.createElement('pre');
-          pre.textContent = text;
+          const div = document.createElement('div');
+          div.className = 'md-body';
+          div.innerHTML = parseMarkdown(text);
           body.innerHTML = '';
-          body.appendChild(pre);
+          body.appendChild(div);
+          body.scrollTop = 0;
         })
         .catch(() => {
-          body.innerHTML = '<span class="lightbox-loading" style="color:var(--warn)">// file not found — place file at: ' + path + '</span>';
+          body.innerHTML = `<span class="lightbox-loading" style="color:var(--warn)">// file not found — place file at: ${path}</span>`;
         });
     }
   }
@@ -1898,9 +2022,7 @@
     if (e.target === document.getElementById('lightbox')) closeLightbox();
   }
 
-  document.addEventListener('keydown', e => {
-    if (e.key === 'Escape') closeLightbox();
-  });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox(); });
 </script>
 
 </body>
