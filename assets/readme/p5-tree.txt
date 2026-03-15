@@ -1,0 +1,36 @@
+/home/apu/Documents/BlockDG work/Blockdag-Operator-Toolkit
+├── 01-installation-and-self-healing
+│   ├── installer-v7.2.sh
+│   ├── Linux-Node-v6-SMART.sh
+│   ├── Patch-v6.sh
+│   ├── Restart manager.sh
+│   └── Wolverine.sh
+├── 02-system-optimization
+│   ├── bdg_optimizer_v1.1.sh
+│   ├── bdg_reverse_optimizer_v1.1.sh
+│   ├── Flush.sh
+│   └── Optimization-guides.md
+├── 03-node-monitoring-and-diagnostics
+│   ├── ETA.sh
+│   ├── Latency-Peer.sh
+│   └── Port-Forwarding.sh
+├── 04-docker-and-permissions
+│   ├── check-permissions.sh
+│   ├── Fix-Permissions.sh
+│   ├── Official-Docker-Installation.sh
+│   └── Remove-Old-Docker.sh
+├── 05-backup-and-recovery
+│   ├── 4folder-bkup.sh
+│   ├── bkup-need-work.sh
+│   ├── JumpStart.sh
+│   ├── Restore.sh
+│   └── Simple-Copy.sh
+├── 06-database-tools
+│   └── SST-RockDB.sh
+├── 07-web-tools
+│   ├── crypto_tracker.html
+│   └── README_CryptoTracker.pdf
+└── README.md
+
+8 directories, 25 files
+

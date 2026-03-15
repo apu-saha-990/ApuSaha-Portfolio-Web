@@ -1039,8 +1039,9 @@
   .lightbox-box {
     background: var(--surface);
     border: 1px solid var(--border2);
-    max-width: 92vw;
-    max-height: 90vh;
+    width: 92vw;
+    max-width: 1200px;
+    height: 90vh;
     display: flex;
     flex-direction: column;
     overflow: hidden;
@@ -1051,9 +1052,11 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 12px 20px;
+    padding: 10px 20px;
     border-bottom: 1px solid var(--border);
     background: var(--bg2);
+    flex-shrink: 0;
+    gap: 12px;
   }
 
   .lightbox-title {
@@ -1061,11 +1064,39 @@
     font-size: 11px;
     color: var(--text3);
     letter-spacing: 0.12em;
+    flex: 1;
+  }
+
+  .lightbox-controls {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .lightbox-btn {
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--text3);
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    cursor: pointer;
+    padding: 3px 10px;
+    line-height: 1.4;
+    transition: all 0.2s;
+  }
+  .lightbox-btn:hover { color: var(--accent); border-color: var(--accent); }
+
+  .lightbox-zoom-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--text3);
+    min-width: 44px;
+    text-align: center;
   }
 
   .lightbox-close {
     font-family: var(--mono);
-    font-size: 18px;
+    font-size: 16px;
     color: var(--text3);
     background: none;
     border: none;
@@ -1073,33 +1104,51 @@
     line-height: 1;
     padding: 0 4px;
     transition: color 0.2s;
+    margin-left: 4px;
   }
   .lightbox-close:hover { color: var(--accent); }
 
   .lightbox-body {
+    flex: 1;
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+  }
+
+  .lightbox-img-viewport {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    cursor: grab;
+  }
+  .lightbox-img-viewport.grabbing { cursor: grabbing; }
+  .lightbox-img-viewport img {
+    position: absolute;
+    transform-origin: 0 0;
+    user-select: none;
+    -webkit-user-drag: none;
+    max-width: none;
+    max-height: none;
+  }
+
+  .lightbox-md-scroll {
+    position: absolute;
+    inset: 0;
     overflow-y: auto;
     padding: 32px 40px;
-    min-height: 200px;
-    max-height: calc(90vh - 48px);
-    width: 100%;
   }
 
-  .lightbox-body img {
-    max-width: 100%;
-    max-height: 80vh;
-    display: block;
-    margin: 0 auto;
-  }
-
-  .lightbox-body pre {
+  .lightbox-hint {
+    position: absolute;
+    bottom: 12px;
+    left: 50%;
+    transform: translateX(-50%);
     font-family: var(--mono);
-    font-size: 12px;
-    color: var(--text2);
-    line-height: 1.7;
-    white-space: pre-wrap;
-    word-break: break-word;
-    max-width: 800px;
-    width: 100%;
+    font-size: 10px;
+    color: var(--text3);
+    letter-spacing: 0.1em;
+    pointer-events: none;
+    opacity: 0.6;
   }
 
   /* Markdown rendered styles */
@@ -1569,33 +1618,17 @@
         <h3 class="project-title">WalletDNA — Behavioural Wallet Fingerprinting</h3>
         <p class="project-desc">
           A forensic intelligence tool that generates a unique behavioural fingerprint for every wallet it analyses.
-          A wallet can change its address — it cannot change its behaviour. 
-          PHANTOM finds it anyway.
+          A wallet can change its address — it cannot change its behaviour.
+          WalletDNA finds the pattern anyway.
         </p>
         <ul class="project-features">
-          <li>Multi-dimensional DNA from gas habits, timing, value fragmentation, contract preferences</li>
-          <li>Bot vs human classification from behavioural signatures alone</li>
-          <li>Cross-chain wallet similarity matching — find linked wallets without address correlation</li>
-          <li>Impersonation detection — flags wallets mimicking known legitimate behaviour</li>
-          <li>Built from first-hand experience classifying wallets in a live fraud investigation</li>
+          <li>7-dimension DNA from gas habits, timing windows, value fragmentation, contract preferences, mempool speed, and activity cycles</li>
+          <li>Bot vs human classification from behavioural signals alone — no address labels needed</li>
+          <li>Batch investigation cases — load 100 wallets, find which ones behave identically</li>
+          <li>Cluster detection — wallets scoring 0.92+ similarity flagged as likely same operator</li>
+          <li>Built from first-hand experience in a live BDAG presale fraud investigation</li>
         </ul>
-        <div class="terminal">
-          <div class="terminal-header">
-            <span class="term-dot"></span>
-            <span class="term-dot"></span>
-            <span class="term-dot"></span>
-            <span class="term-title">phantom — DNA output</span>
-          </div>
-          <div class="terminal-body">
-<span class="term-prompt">$</span> <span class="term-cmd">phantom analyse 0x742d35Cc...4df9</span><br>
-<span class="term-out">Fetching 90-day transaction history... </span><span class="term-green">✓ 847 txns</span><br>
-<span class="term-out">Running behavioural analysis... </span><span class="term-green">✓ complete</span><br>
-<span class="term-out">━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span><br>
-<span class="term-accent">DNA STRING:</span><br>
-<span class="term-green">G:MED-STABLE</span> <span class="term-out">|</span> <span class="term-orange">T:0200-0600UTC</span> <span class="term-out">|</span> <span class="term-accent">V:SPLIT-HIGH</span> <span class="term-out">|</span> <span class="term-green">C:DEX-HEAVY</span> <span class="term-out">|</span> <span class="term-orange">M:INSTANT</span> <span class="term-out">|</span> <span class="term-accent">A:BURST-SLEEP</span><br>
-<span class="term-out">Classification: </span><span class="term-orange">⚠ BOT_SIGNATURE (94% confidence)</span>
-          </div>
-        </div>
+        <img src="assets/readme/p4-terminal.png" alt="WalletDNA terminal output" onclick="openLightbox('arch','assets/readme/p4-terminal.png','P04 — Terminal Output')" style="width:100%;border:1px solid var(--border);margin-bottom:16px;cursor:zoom-in;transition:border-color 0.2s;" onmouseover="this.style.borderColor='var(--accent3)'" onmouseout="this.style.borderColor='var(--border)'">
         <div class="project-links">
           <a href="https://github.com/apu-saha-990/Project04-wallet-DNA" target="_blank" class="link-chip">
             <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2A10 10 0 0 0 2 12c0 4.42 2.87 8.17 6.84 9.5.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34-.46-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.87 1.52 2.34 1.07 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.92 0-1.11.38-2 1.03-2.71-.1-.25-.45-1.29.1-2.64 0 0 .84-.27 2.75 1.02.79-.22 1.65-.33 2.5-.33.85 0 1.71.11 2.5.33 1.91-1.29 2.75-1.02 2.75-1.02.55 1.35.2 2.39.1 2.64.65.71 1.03 1.6 1.03 2.71 0 3.82-2.34 4.66-4.57 4.91.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0 0 12 2z"/></svg>
@@ -1605,7 +1638,7 @@
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
             Architecture
           </button>
-          <button class="link-chip" onclick="openLightbox('arch','assets/readme/p4-tree.png','P04 — Folder Tree')">
+          <button class="link-chip" onclick="openLightbox('readme','assets/readme/p4-tree.txt','P04 — Folder Tree')">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 4h4v4H3zM3 10h4v4H3zM3 16h4v4H3M7 6h3M7 12h7M7 18h5M10 6v6M14 12v6"/></svg>
             FolderTree
           </button>
@@ -1623,8 +1656,8 @@
             <div class="stack-item-val">Etherscan V2 API</div>
           </div>
           <div class="stack-item">
-            <div class="stack-item-cat">Real-Time</div>
-            <div class="stack-item-val">Alchemy WebSocket</div>
+            <div class="stack-item-cat">Chains</div>
+            <div class="stack-item-val">ETH · TRX · DOGE</div>
           </div>
           <div class="stack-item">
             <div class="stack-item-cat">DNA Engine</div>
@@ -1632,7 +1665,7 @@
           </div>
           <div class="stack-item">
             <div class="stack-item-cat">Matching</div>
-            <div class="stack-item-val">Math Scoring Algo</div>
+            <div class="stack-item-val">Weighted Cosine Similarity</div>
           </div>
           <div class="stack-item">
             <div class="stack-item-cat">Database</div>
@@ -1643,17 +1676,17 @@
             <div class="stack-item-val">Python Rich</div>
           </div>
           <div class="stack-item">
-            <div class="stack-item-cat">Metrics</div>
-            <div class="stack-item-val">Prometheus + Grafana</div>
+            <div class="stack-item-cat">Cache</div>
+            <div class="stack-item-val">JSON per case</div>
           </div>
           <div class="stack-item">
-            <div class="stack-item-cat">Alerts</div>
-            <div class="stack-item-val">Discord Webhook</div>
+            <div class="stack-item-cat">CI/CD</div>
+            <div class="stack-item-val">GitHub Actions</div>
           </div>
         </div>
         <div class="proof-banner" style="--card-accent:var(--accent3)">
           <div class="proof-label">// Why This Is Rare</div>
-          <div class="proof-text">The entire industry clusters by address proximity or value flow. Nobody uses behavioural DNA. Directly applicable to AML compliance, fraud detection, and bot identification. Built from live fraud investigation experience.</div>
+          <div class="proof-text">The entire industry clusters wallets by address proximity or value flow. Nobody uses behavioural DNA. A wallet can rotate addresses daily — it cannot easily change when it sleeps, how it fragments value, or whether it confirms in 1 block every time. WalletDNA makes that visible. Directly applicable to AML compliance, fraud detection, and bot identification.</div>
         </div>
       </div>
     </div>
@@ -1691,7 +1724,7 @@
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
             Architecture
           </button>
-          <button class="link-chip" onclick="openLightbox('arch','assets/readme/p5-tree.png','P05 — Folder Tree')">
+          <button class="link-chip" onclick="openLightbox('readme','assets/readme/p5-tree.txt','P05 — Folder Tree')">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 4h4v4H3zM3 10h4v4H3zM3 16h4v4H3M7 6h3M7 12h7M7 18h5M10 6v6M14 12v6"/></svg>
             FolderTree
           </button>
@@ -1891,15 +1924,125 @@
   <div class="lightbox-box">
     <div class="lightbox-header">
       <span class="lightbox-title" id="lightbox-title">// —</span>
+      <div class="lightbox-controls" id="lightbox-controls" style="display:none">
+        <button class="lightbox-btn" onclick="lbZoom(-0.25)">−</button>
+        <span class="lightbox-zoom-label" id="lightbox-zoom-label">100%</span>
+        <button class="lightbox-btn" onclick="lbZoom(+0.25)">+</button>
+        <button class="lightbox-btn" onclick="lbReset()" style="font-size:10px;letter-spacing:0.08em">RESET</button>
+      </div>
       <button class="lightbox-close" onclick="closeLightbox()">✕</button>
     </div>
     <div class="lightbox-body" id="lightbox-body">
-      <span class="lightbox-loading">loading...</span>
+      <span class="lightbox-loading">// loading...</span>
     </div>
   </div>
 </div>
 
 <script>
+  // ── Pan + Zoom state ──
+  let lbScale = 1, lbOffX = 0, lbOffY = 0;
+  let lbDragging = false, lbStartX = 0, lbStartY = 0, lbOriginX = 0, lbOriginY = 0;
+  let lbImg = null, lbViewport = null;
+
+  function lbApplyTransform() {
+    if (!lbImg) return;
+    lbImg.style.transform = `translate(${lbOffX}px, ${lbOffY}px) scale(${lbScale})`;
+    document.getElementById('lightbox-zoom-label').textContent = Math.round(lbScale * 100) + '%';
+  }
+
+  function lbClampOffset() {
+    if (!lbImg || !lbViewport) return;
+    const vw = lbViewport.clientWidth, vh = lbViewport.clientHeight;
+    const iw = lbImg.naturalWidth * lbScale, ih = lbImg.naturalHeight * lbScale;
+    const minX = Math.min(0, vw - iw), minY = Math.min(0, vh - ih);
+    const maxX = Math.max(0, vw - iw), maxY = Math.max(0, vh - ih);
+    lbOffX = Math.max(minX, Math.min(maxX, lbOffX));
+    lbOffY = Math.max(minY, Math.min(maxY, lbOffY));
+  }
+
+  function lbZoom(delta) {
+    if (!lbImg || !lbViewport) return;
+    const cx = lbViewport.clientWidth / 2, cy = lbViewport.clientHeight / 2;
+    const prevScale = lbScale;
+    lbScale = Math.max(0.25, Math.min(8, lbScale + delta));
+    lbOffX = cx - (cx - lbOffX) * (lbScale / prevScale);
+    lbOffY = cy - (cy - lbOffY) * (lbScale / prevScale);
+    lbClampOffset();
+    lbApplyTransform();
+  }
+
+  function lbReset() {
+    if (!lbImg || !lbViewport) return;
+    const vw = lbViewport.clientWidth, vh = lbViewport.clientHeight;
+    lbScale = Math.min(1, vw / lbImg.naturalWidth, vh / lbImg.naturalHeight);
+    lbOffX = (vw - lbImg.naturalWidth * lbScale) / 2;
+    lbOffY = (vh - lbImg.naturalHeight * lbScale) / 2;
+    lbApplyTransform();
+  }
+
+  function lbInitPanZoom(viewport, img) {
+    lbViewport = viewport; lbImg = img;
+    lbReset();
+
+    // Mouse wheel zoom
+    viewport.addEventListener('wheel', e => {
+      e.preventDefault();
+      const rect = viewport.getBoundingClientRect();
+      const cx = e.clientX - rect.left, cy = e.clientY - rect.top;
+      const prevScale = lbScale;
+      lbScale = Math.max(0.25, Math.min(8, lbScale - e.deltaY * 0.001));
+      lbOffX = cx - (cx - lbOffX) * (lbScale / prevScale);
+      lbOffY = cy - (cy - lbOffY) * (lbScale / prevScale);
+      lbClampOffset();
+      lbApplyTransform();
+    }, { passive: false });
+
+    // Mouse drag
+    viewport.addEventListener('mousedown', e => {
+      lbDragging = true; lbStartX = e.clientX; lbStartY = e.clientY;
+      lbOriginX = lbOffX; lbOriginY = lbOffY;
+      viewport.classList.add('grabbing');
+    });
+    window.addEventListener('mousemove', e => {
+      if (!lbDragging) return;
+      lbOffX = lbOriginX + (e.clientX - lbStartX);
+      lbOffY = lbOriginY + (e.clientY - lbStartY);
+      lbClampOffset();
+      lbApplyTransform();
+    });
+    window.addEventListener('mouseup', () => {
+      lbDragging = false;
+      if (lbViewport) lbViewport.classList.remove('grabbing');
+    });
+
+    // Touch pinch + drag
+    let touches = [], lastDist = 0;
+    viewport.addEventListener('touchstart', e => { touches = Array.from(e.touches); if (touches.length === 1) { lbStartX = touches[0].clientX; lbStartY = touches[0].clientY; lbOriginX = lbOffX; lbOriginY = lbOffY; } }, { passive: true });
+    viewport.addEventListener('touchmove', e => {
+      e.preventDefault();
+      const t = Array.from(e.touches);
+      if (t.length === 1) {
+        lbOffX = lbOriginX + (t[0].clientX - lbStartX);
+        lbOffY = lbOriginY + (t[0].clientY - lbStartY);
+        lbClampOffset(); lbApplyTransform();
+      } else if (t.length === 2) {
+        const dist = Math.hypot(t[0].clientX - t[1].clientX, t[0].clientY - t[1].clientY);
+        if (lastDist) {
+          const rect = viewport.getBoundingClientRect();
+          const cx = (t[0].clientX + t[1].clientX) / 2 - rect.left;
+          const cy = (t[0].clientY + t[1].clientY) / 2 - rect.top;
+          const prevScale = lbScale;
+          lbScale = Math.max(0.25, Math.min(8, lbScale * (dist / lastDist)));
+          lbOffX = cx - (cx - lbOffX) * (lbScale / prevScale);
+          lbOffY = cy - (cy - lbOffY) * (lbScale / prevScale);
+          lbClampOffset(); lbApplyTransform();
+        }
+        lastDist = dist;
+      }
+    }, { passive: false });
+    viewport.addEventListener('touchend', () => { lastDist = 0; }, { passive: true });
+  }
+
   function parseMarkdown(md) {
     const lines = md.split('\n');
     let html = '';
@@ -1986,26 +2129,48 @@
     const overlay = document.getElementById('lightbox');
     const body = document.getElementById('lightbox-body');
     const titleEl = document.getElementById('lightbox-title');
+    const controls = document.getElementById('lightbox-controls');
     titleEl.textContent = '// ' + title;
     body.innerHTML = '<span class="lightbox-loading">// loading...</span>';
     overlay.classList.add('active');
     document.body.style.overflow = 'hidden';
+    lbImg = null; lbViewport = null;
 
     if (type === 'arch') {
+      controls.style.display = 'flex';
       const img = new Image();
-      img.onload = () => { body.innerHTML = ''; body.appendChild(img); };
-      img.onerror = () => { body.innerHTML = `<span class="lightbox-loading" style="color:var(--warn)">// image not found — place file at: ${path}</span>`; };
+      img.onload = () => {
+        body.innerHTML = '';
+        const vp = document.createElement('div');
+        vp.className = 'lightbox-img-viewport';
+        vp.appendChild(img);
+        body.appendChild(vp);
+        const hint = document.createElement('div');
+        hint.className = 'lightbox-hint';
+        hint.textContent = 'scroll to zoom · drag to pan';
+        body.appendChild(hint);
+        lbScale = 1; lbOffX = 0; lbOffY = 0;
+        lbInitPanZoom(vp, img);
+        setTimeout(() => { hint.style.transition = 'opacity 1s'; hint.style.opacity = '0'; }, 2500);
+      };
+      img.onerror = () => {
+        controls.style.display = 'none';
+        body.innerHTML = `<span class="lightbox-loading" style="color:var(--warn)">// image not found — place file at: ${path}</span>`;
+      };
       img.src = path;
     } else {
+      controls.style.display = 'none';
       fetch(path)
         .then(r => { if (!r.ok) throw new Error('not found'); return r.text(); })
         .then(text => {
+          const scroll = document.createElement('div');
+          scroll.className = 'lightbox-md-scroll';
           const div = document.createElement('div');
           div.className = 'md-body';
           div.innerHTML = parseMarkdown(text);
+          scroll.appendChild(div);
           body.innerHTML = '';
-          body.appendChild(div);
-          body.scrollTop = 0;
+          body.appendChild(scroll);
         })
         .catch(() => {
           body.innerHTML = `<span class="lightbox-loading" style="color:var(--warn)">// file not found — place file at: ${path}</span>`;

@@ -1,0 +1,86 @@
+apu@ArtX:~/Project04-wallet-DNA$ tree /home/apu/Project04-wallet-DNA
+/home/apu/Project04-wallet-DNA
+├── cases
+│   └── Bdag Investigation
+│       ├── case.json
+│       └── profiles
+│           ├── 0x430f4919d679b02dca4572579caabb7676d65f1e.json
+│           ├── 0x4c39ed0438d5e8913acf423db6d56cce78b2d367.json
+│           ├── 0x7ca99dc73b06e2b4cdc7bb145026a0c6d94c897d.json
+│           ├── 0x95ad61b0a150d79219dcf64e1e6cc01f0b64c4ce.json
+│           ├── 0xc275291574709821c9010b6bd47bed823bc4dd29.json
+│           ├── 0xdac17f958d2ee523a2206206994597c13d831ec7.json
+│           ├── 0xe19d644e7b535c45e009382f40ee35628899dbe6.json
+│           ├── dnhz79falntqwbweuyxbxdcek64hqq2zet.json
+│           ├── tbaqylheoanfcmqgin749yq2xe7pcqplky.json
+│           ├── tjgwmkvfrpozevnb5wpcadw1ojpvpxjzmy.json
+│           ├── tvm6kuxbfpvqcudjdb9vavxxbtb2bffprr.json
+│           └── tyfka5apxiqaa5xp3ebgdpmlgxkwmweqdu.json
+├── docker-compose.yml
+├── Dockerfile
+├── pyproject.toml
+├── README.md
+├── requirements.txt
+├── tests
+│   └── unit
+│       ├── test_adapters.py
+│       └── test_engine.py
+├── walletdna
+│   ├── adapters
+│   │   ├── base.py
+│   │   ├── doge.py
+│   │   ├── eth.py
+│   │   ├── __init__.py
+│   │   ├── __pycache__
+│   │   │   ├── base.cpython-312.pyc
+│   │   │   ├── doge.cpython-312.pyc
+│   │   │   ├── eth.cpython-312.pyc
+│   │   │   ├── __init__.cpython-312.pyc
+│   │   │   ├── resolver.cpython-312.pyc
+│   │   │   └── trx.cpython-312.pyc
+│   │   ├── resolver.py
+│   │   └── trx.py
+│   ├── cases
+│   │   ├── analyser.py
+│   │   ├── __init__.py
+│   │   ├── manager.py
+│   │   └── __pycache__
+│   │       ├── analyser.cpython-312.pyc
+│   │       ├── __init__.cpython-312.pyc
+│   │       └── manager.cpython-312.pyc
+│   ├── dashboard
+│   │   ├── __init__.py
+│   │   ├── network_table.py
+│   │   ├── __pycache__
+│   │   │   ├── __init__.cpython-312.pyc
+│   │   │   ├── network_table.cpython-312.pyc
+│   │   │   └── terminal.cpython-312.pyc
+│   │   └── terminal.py
+│   ├── engine
+│   │   ├── classifier.py
+│   │   ├── composer.py
+│   │   ├── extractor.py
+│   │   ├── __init__.py
+│   │   ├── models.py
+│   │   ├── __pycache__
+│   │   │   ├── classifier.cpython-312.pyc
+│   │   │   ├── composer.cpython-312.pyc
+│   │   │   ├── extractor.cpython-312.pyc
+│   │   │   ├── __init__.cpython-312.pyc
+│   │   │   ├── models.cpython-312.pyc
+│   │   │   └── similarity.cpython-312.pyc
+│   │   └── similarity.py
+│   ├── __init__.py
+│   ├── __main__.py
+│   ├── main.py
+│   ├── __pycache__
+│   │   └── __init__.cpython-312.pyc
+│   └── storage
+│       ├── __init__.py
+│       └── schema.sql
+└── WalletDNA_Architecture.png
+
+17 directories, 63 files
+
+
+
