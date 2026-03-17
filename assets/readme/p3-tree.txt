@@ -1,0 +1,73 @@
+Project03-blockchain-tx-monitor
+├── config
+│   └── config.yaml
+├── demo
+│   ├── demo_data.py
+│   ├── demo_runner.py
+│   ├── __init__.py
+│   ├── README.md
+│   └── run_demo.py
+├── docker-compose.yml
+├── Dockerfile
+├── k8s
+│   ├── configmap.yaml
+│   ├── grafana.yaml
+│   ├── namespace.yaml
+│   ├── prometheus.yaml
+│   ├── README.md
+│   ├── secret.yaml
+│   ├── timescaledb.yaml
+│   └── txmonitor.yaml
+├── monitoring
+│   └── prometheus.yml
+├── pyproject.toml
+├── README.md
+├── setup.sh
+├── src
+│   ├── alerting
+│   │   └── __init__.py
+│   ├── analysis
+│   │   ├── anomaly.py
+│   │   ├── __init__.py
+│   │   └── recirculation.py
+│   ├── dashboard
+│   │   ├── dashboard.py
+│   │   └── __init__.py
+│   ├── filters
+│   │   ├── contract_filter.py
+│   │   ├── filter_chain.py
+│   │   ├── gas_filter.py
+│   │   ├── __init__.py
+│   │   └── value_filter.py
+│   ├── ingestion
+│   │   ├── alchemy_ws.py
+│   │   ├── __init__.py
+│   │   ├── price_feed.py
+│   │   ├── __pycache__
+│   │   │   ├── alchemy_ws.cpython-312.pyc
+│   │   │   ├── __init__.cpython-312.pyc
+│   │   │   └── price_feed.cpython-312.pyc
+│   │   └── stream_manager.py
+│   ├── __init__.py
+│   ├── main.py
+│   ├── metrics
+│   │   ├── __init__.py
+│   │   └── metrics.py
+│   ├── __pycache__
+│   │   ├── __init__.cpython-312.pyc
+│   │   └── main.cpython-312.pyc
+│   └── storage
+│       ├── db.py
+│       ├── __init__.py
+│       └── schema.sql
+├── tests
+│   ├── conftest.py
+│   ├── __init__.py
+│   ├── integration
+│   │   └── __init__.py
+│   └── unit
+│       └── __init__.py
+└── Transaction-Monitor-Architecture.png
+
+18 directories, 52 files
+
