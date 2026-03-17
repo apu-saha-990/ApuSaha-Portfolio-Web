@@ -1,0 +1,58 @@
+Project02-omninode-infrastructure$ tree
+.
+├── ansible
+│   ├── ansible.cfg
+│   ├── inventory.ini
+│   └── playbooks
+│       └── setup.yml
+├── docker
+│   └── bitcoin
+│       └── bitcoin.conf
+├── docker-compose.yml
+├── kubernetes
+│   ├── bitcoin-deployment.yml
+│   ├── configmap.yml
+│   ├── ethereum-deployment.yml
+│   ├── kubernetes_COMMANDS.md
+│   ├── lighthouse-deployment.yml
+│   ├── monitoring-deployment.yml
+│   ├── namespace.yml
+│   ├── persistent-volumes.yml
+│   └── secrets.yml
+├── LICENSE
+├── monitoring
+│   ├── alertmanager
+│   │   └── alertmanager.yml
+│   ├── grafana
+│   │   ├── dashboards
+│   │   │   └── omninode-dashboard.json
+│   │   └── provisioning
+│   │       ├── dashboards
+│   │       │   └── dashboards.yml
+│   │       └── datasources
+│   │           └── prometheus.yml
+│   └── prometheus
+│       ├── alerts.yml
+│       └── prometheus.yml
+├── omninode
+├── Omninode-Architecture.png
+├── omninode-monitoring-flow.png
+├── omni-setup.sh
+├── README.md
+├── scripts
+│   ├── backup.sh
+│   ├── bitcoin-exporter.py
+│   ├── check-ports.sh
+│   ├── discord_bridge.py
+│   ├── health-watch.sh
+│   ├── logs-export.sh
+│   ├── omninode.sh
+│   └── resource-manager.sh
+└── terraform
+    ├── main.tf
+    ├── outputs.tf
+    ├── terraform.tfvars.example
+    └── variables.tf
+
+16 directories, 38 files
+
