@@ -1,148 +1,185 @@
 # MultiSig Treasury Wallet
 
-A multi-signature treasury wallet built on Ethereum Sepolia testnet.
+A shared wallet where multiple people must agree before any money moves.
 
-**Live Contract:** [`0x60Baaa4E30b48a74c40F2bFA85866C0b48f21aB7`](https://sepolia.etherscan.io/address/0x60Baaa4E30b48a74c40F2bFA85866C0b48f21aB7) — verified on Etherscan.
-
----
-
-## What It Does
-
-A smart contract wallet that requires multiple signatures before any transaction executes. M-of-N owners must approve before funds move — no single person can act alone.
-
-- Configurable signature threshold (e.g. 2-of-3)
-- Any owner can propose a transaction
-- Required number of owners must approve before execution
-- Owner management (add/remove) goes through the same approval process
-- Emergency pause — blocks fund movement while governance still works
-- Real-time monitoring with Prometheus metrics and Discord alerts
-
-The frontend lets owners connect with MetaMask, submit transactions, confirm them, and execute once the threshold is met.
-
-Same architecture used by Gnosis Safe and real DAO treasuries — built from scratch to understand how it works under the hood, not just how to use it.
+**Live:** [View on Etherscan](https://sepolia.etherscan.io/address/0x60Baaa4E30b48a74c40F2bFA85866C0b48f21aB7)
 
 ---
 
-## Why This Project Matters
+## What Problem Does This Solve
 
-Multi-signature wallets remove single-key risk. If one private key is lost, hacked, or compromised, the attacker still cannot move funds without the required number of approvals. This is why DAOs, startups, and protocols use multi-sig for treasury operations, shared custody, and governance. Building this from scratch helped me understand how these systems actually work under the hood.
+If one person controls a wallet and their password gets stolen — the money is gone. There is no recovery path. No way to stop it.
 
----
+This project solves that. It requires two out of three people to approve any transaction before a single penny moves. Even if one person's account is fully compromised, the attacker still cannot do anything alone. They need a second approval. That second approval is never coming.
 
-## How I Built This
-
-I'm a career changer coming from a factory background — no CS degree, no bootcamp. I use AI (Claude) throughout my work as a learning tool, code reviewer, and debugging partner. Every terminal error went back to Claude. Every concept I didn't understand, I worked through with it.
-
-What I own: the decisions. What to build, how it's structured, when something broke and why. The Post-Mortem below is a real example of that process.
-
-The system is fully test-covered and demo-ready.
+This is the same approach used by major organisations to protect shared funds worth billions of dollars. I built it from scratch to understand exactly how it works.
 
 ---
 
-## What I Learned
+## How It Works
 
-- How multi-sig works at the contract level — not just how to configure one
-- Solidity access control and why modifiers apply at function entry (learned this the hard way — see Post-Mortem)
-- Writing tests that cover edge cases, not just the happy path
-- Hardhat, testnet deployment, and Etherscan verification
-- Prometheus metrics and Discord alerting from a Node.js monitoring system
-- GitHub Actions CI — tests run automatically on every push
-- Reading terminal errors and working through them systematically
+1. One of the wallet owners proposes a transaction — who to pay and how much
+2. The other owners are notified and review the proposal
+3. Each owner votes to approve or reject it
+4. Once enough approvals are collected, anyone can trigger the payment
+5. If the required number of approvals is never reached, the money never moves
+
+No single person can act alone. The rules are enforced automatically — there is no admin who can override them.
 
 ---
 
-## Post-Mortem: The Pause Lockout Bug
+## What's Built
 
-I deployed an emergency pause feature. During testing, pausing the contract made it impossible to execute the unpause transaction — permanent lockout, no recovery path.
+**The wallet itself** — the core rules that live on the network and enforce the approval process. Once deployed, nobody can change how it works without going through the same approval process.
 
-**Root cause:** `whenNotPaused` was applied at the `executeTransaction` level, blocking all execution — including the governance call to unpause.
+**A web interface** — owners connect their personal wallet, see all pending transactions, approve or reject them, and trigger payments once enough approvals are collected.
+
+**A monitoring system** — watches the wallet around the clock and sends an alert to Discord the moment a large transaction is proposed or ownership changes hands.
+
+**A live activity tracker** — keeps a running count of every transaction, approval, and execution. Plugs into standard industry monitoring tools without any extra setup.
+
+**Automated tests** — 25 tests that verify every feature works correctly before anything gets deployed. If any test fails, deployment is blocked.
+
+**Automatic code checks** — every time code is pushed to GitHub, all tests run automatically. Broken code is caught immediately before it can cause problems.
+
+---
+
+## Why I Built This From Scratch
+
+A tool already exists that does this. I could have used it in an afternoon.
+
+But using an existing tool shows you know how to configure it. Building it from scratch shows you understand what it is actually doing — the rules it enforces, the decisions it makes, and the ways it can fail. That is a different skill entirely. That is what this build is about.
+
+---
+
+## A Bug I Found
+
+I added an emergency pause feature — a way to freeze the wallet completely if something suspicious was happening. I deployed it to the test network and ran through my tests. Pausing worked perfectly.
+
+Then I tried to unpause it. The transaction failed. I ran it again. Failed again. I had locked myself out of my own wallet with no way back in.
+
+On a real deployment with real money, that would have been permanent. Everything frozen. No recovery.
+
+The problem turned out to be one line of logic. The pause was blocking everything — including the transaction that was supposed to turn it off. The rule I wrote to protect the wallet was protecting it from me.
+
+Here is what the broken version looked like:
 
 ```solidity
-// BROKEN — governance can't run while paused
+// BROKEN — the pause blocks everything, including the unpause itself
 function executeTransaction(uint _txIndex) public onlyOwner whenNotPaused {
     (bool success,) = transaction.to.call{value: transaction.value}(transaction.data);
 }
 ```
 
-**Fix:** Gate only external fund movement — governance self-calls always work.
+The fix was to only block payments going out. Internal instructions — like unpausing — always go through:
 
 ```solidity
-// FIXED
+// FIXED — payments are blocked when paused, but internal instructions always work
 function executeTransaction(uint _txIndex) public onlyOwner {
     require(!paused || transaction.to == address(this), "Contract is paused");
     (bool success,) = transaction.to.call{value: transaction.value}(transaction.data);
 }
 ```
 
-**Lesson:** Modifiers apply at function entry, not at a specific line. Test failure modes explicitly. Contract redeployed as v4 with this fix.
+The lesson: test what happens when things go wrong, not just when they go right. The wallet was redeployed with the fix. That version is live today.
+
+---
+
+## How I Built This
+
+I came from a factory background. No degree in this field. No bootcamp.
+
+I use AI (Claude) throughout development — as a learning tool, code reviewer, and debugging partner. Every terminal error went back to Claude. Every concept I didn't understand, I worked through until I did.
+
+What I own: the decisions. What to build, how to structure it, what broke, and why. The bug above is a real example of that process — not a story I read, but a mistake I made and fixed myself.
+
+The systems run. The tests pass. I can demo everything live.
+
+---
+
+## What I Learned
+
+- How a shared approval wallet works at the rule level — not just how to use one
+- Why the order of operations matters when money is involved — update the records before sending, not after
+- How to write tests that check for failure, not just success
+- Why sending ETH the old way breaks with modern wallets — and what the current standard is
+- How to build a real-time monitoring system that connects to industry-standard tools
+- How to publish contract source code publicly so anyone can inspect it
+- How to automate deployment so broken code can never reach the network
+
+---
+
+## Deployment History
+
+| Version | What Changed |
+|---|---|
+| v1 | First working deployment |
+| v2 | Added ability to add and remove owners without redeploying the whole wallet |
+| v3 | Added emergency pause — had a critical bug (see above) |
+| v4 | Bug fixed. Added live monitoring, real-time USD cost display, Discord alerts — **current** |
 
 ---
 
 ## Running It
 
 ```bash
-# Install and deploy
+# Full setup — installs everything, runs all tests, deploys
 bash scripts/setup.sh
-```
 
-Handles everything: dependencies, compilation, 25-test verification, Sepolia deployment, Etherscan verification. Deployment is blocked if any test fails.
-
-```bash
-# Start monitoring
+# Start the monitoring system
 npx hardhat run scripts/startMonitor.js --network sepolia
 
-# Start frontend
+# Start the web interface
 cd frontend && npm start
-# Open http://localhost:3000
 
-# Check Prometheus metrics
+# Check live activity stats
 curl http://localhost:9090/metrics
 ```
 
 ---
 
-## Environment Setup
+## Environment Variables
 
 ```bash
-PRIVATE_KEY=                   # Deployer private key — never commit
-SEPOLIA_RPC_URL=               # Alchemy endpoint
-ETHERSCAN_API_KEY=             # Contract verification
-COINMARKETCAP_API_KEY=         # Live USD gas pricing
-DISCORD_WEBHOOK_URL=           # Transaction alerts
-OWNER_1=0x...
-OWNER_2=0x...
-OWNER_3=0x...
-REQUIRED_CONFIRMATIONS=2
+PRIVATE_KEY=                   # The deployer's private key — never commit this
+SEPOLIA_RPC_URL=               # Network connection endpoint from Alchemy
+ETHERSCAN_API_KEY=             # For publishing the source code publicly
+COINMARKETCAP_API_KEY=         # For showing live USD transaction costs
+DISCORD_WEBHOOK_URL=           # Where alerts get sent
+OWNER_1=0x...                  # First wallet owner address
+OWNER_2=0x...                  # Second wallet owner address
+OWNER_3=0x...                  # Third wallet owner address
+REQUIRED_CONFIRMATIONS=2       # How many approvals are needed
 ```
 
-Copy `.env.example` to `.env`. Never commit your `.env`.
+Copy `.env.example` to `.env`. Never commit your `.env` file.
 
 ---
 
-## Deployment History
+## What's Next
 
-| Version | Address | What Changed |
-|---|---|---|
-| v1 | `0xFbe6d25980243922d94a774255217be1c62a3D1D` | Initial deployment |
-| v2 | `0xdc8d6F7aF51120af2D6c5de861dfdC187eFE70a2` | Dynamic owner governance |
-| v3 | `0xeD092f9AaC91F5E491264187Fb539153B31F9D26` | Pause mechanism (broke — see Post-Mortem) |
-| v4 | `0x60Baaa4E30b48a74c40F2bFA85866C0b48f21aB7` | Pause fixed, Prometheus, live USD gas, Discord |
+- Add a time delay — once approved, wait 24 to 48 hours before the payment can be sent
+- Let owners cancel a transaction by agreement
+- Keep monitoring history saved so it survives restarts
+- Add a visual dashboard for the activity stats
+- Auto-restart the monitoring system if it crashes
 
 ---
 
 ## Tech Stack
 
-| Layer | Technology |
+| What it does | Technology |
 |---|---|
-| Smart Contract | Solidity 0.8.28, Hardhat |
-| Blockchain SDK | Ethers.js v6 |
-| Testnet RPC | Alchemy (Sepolia) |
-| Monitoring | Node.js, Prometheus, structured JSON logging |
-| Alerting | Discord webhooks |
-| Gas Reporting | hardhat-gas-reporter, CoinMarketCap API |
-| Frontend | React, MetaMask, Ethers.js |
-| Testing | Hardhat, Chai — 25 tests |
-| CI/CD | GitHub Actions |
+| Wallet logic and approval rules | Solidity 0.8.28 |
+| Development and testing environment | Hardhat |
+| Connects the app to the network | Ethers.js v6 |
+| Network connection | Alchemy (Sepolia testnet) |
+| Web interface | React + MetaMask |
+| Real-time monitoring system | Node.js |
+| Activity metrics format | Prometheus |
+| Transaction alerts | Discord Webhooks |
+| Live USD cost display | CoinMarketCap API |
+| Automatic test runs on every code push | GitHub Actions |
 
 ---
 
@@ -171,20 +208,11 @@ Copy `.env.example` to `.env`. Never commit your `.env`.
 
 ---
 
-## Roadmap
+## Why Not Use An Existing Tool
 
-- Timelock on execution — configurable delay before a transaction can run
-- Transaction cancellation by owner consensus
-- Grafana dashboard for Prometheus metrics
-- Auto-restart on monitor crash (PM2 or systemd)
-- Persistent event storage so history survives restarts
-- L2 deployment (Arbitrum or Base) for lower gas costs
+For a real treasury holding real money — use the existing tool. It has been audited, tested, and billions of dollars depend on it.
 
----
-
-## Why Not Just Use Gnosis Safe?
-
-For a real treasury — use Safe. This project exists to understand what Safe is doing at the contract level. Using an existing tool is one skill. Building the same thing from scratch is a different one.
+This project exists to understand what that tool is doing under the hood. Using it is one skill. Understanding it is another. This build is about the second one.
 
 ---
 
