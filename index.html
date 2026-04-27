@@ -702,18 +702,7 @@
     overflow: hidden;
   }
 
-  .about-photo-placeholder::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: repeating-linear-gradient(
-      45deg,
-      transparent,
-      transparent 8px,
-      rgba(61,127,212,0.03) 8px,
-      rgba(61,127,212,0.03) 9px
-    );
-  }
+  .about-photo-placeholder::before { content: none; }
 
   .photo-inner {
     text-align: center;
@@ -1385,9 +1374,7 @@
     <!-- LEFT: Identity card -->
     <div class="about-left">
       <div class="about-photo-placeholder">
-        <div class="photo-inner">
-          <span class="photo-label">// PHOTO</span>
-        </div>
+        <img src="assets/img/apu.png" alt="Apu Saha" style="width:100%;height:100%;object-fit:cover;object-position:center top;display:block;">
       </div>
       <h2 class="about-name">Apu Saha</h2>
       <p class="about-bio">Self-taught infrastructure engineer building node infrastructure, observability pipelines, and forensic analysis tools.</p>
